@@ -12,13 +12,11 @@ function SellingPrice(amount) {
 	this.amount = amount;
 }
 
-SellingPrice.prototype.difference = function(price) {
-	return this.amount - price;
+SellingPrice.prototype.difference = function(cost) {
+	return this.amount - cost;
 };
 
-SellingPrice.prototype.sellingPriceMinusCost = function(cost) {
-	return new SellingPrice(this.amount - cost.amount);
-};
+
 
 function Product(cost) {
 	this.cost = cost;
@@ -26,12 +24,6 @@ function Product(cost) {
 
 Product.prototype.method_name = function(first_argument) {
 	// body...
-};
-
-Product.prototype.accumulatedCost = function(products) {
-	return products.reduce(this.cost, function(accum, product) {
-		return accum + product.cost;
-	});
 };
 
 Product.acumulateCost = function(productList) {
@@ -43,14 +35,12 @@ Product.acumulateCost = function(productList) {
 };
 
 Product.prototype.profit = function(sellingProfit) {
-	return sellingProfit.sellingPriceMinusCost(this.cost);
+	return new Profit(sellingProfit.difference(this.getCost()));
 };
 
 Product.prototype.getCost = function() {
 	return this.cost.amount;
 };
-
-
 
 
 
@@ -79,7 +69,7 @@ function UnitSale(productOrPack, sellingPrice) {
 }
 
 UnitSale.prototype.profit = function() {
-	return this.productOrPack.profit(this.sellingPrice).amount;
+	return this.productOrPack.profit(this.sellingPrice);
 };
 
 
@@ -91,15 +81,41 @@ function MultiProductSale(products, sellingPrice) {
 }
 
 MultiProductSale.prototype.profit = function() {
-	return this.sellingPrice.difference(
+	return new Profit(this.sellingPrice.difference(
 		this.totalCost()
-	);
+	));
 };
 
 MultiProductSale.prototype.totalCost = function() {
 	return Product.acumulateCost(this.products);
 };
 
+
+
+function Profit(value) {
+	this._value = value;
+}
+
+Profit.prototype.equals = function(otherProfit) {
+	return this._value == otherProfit._value;
+};
+
+
+function Cow() {
+
+}
+
+Cow.prototype.equals = function(otherCow) {
+	return this === otherCow
+};
+
+function Barter(barterPrice) {
+	this._barterPrice = barterPrice;
+}
+
+Barter.prototype.difference = function(cost) {
+	return this._barterPrice;
+};
 
 
 
@@ -109,7 +125,7 @@ describe("dojo 6", () => {
     		var product = new Product(new Cost(100));
 			var profit = new UnitSale(product, new SellingPrice(300)).profit();
 
-    		chai.assert.equal(200, profit);
+    		chai.assert.isTrue(profit.equals(new Profit(200)));
         });
 
         it("When I sell many products the profit is the difference of selling price and all products costs", () => {
@@ -117,14 +133,14 @@ describe("dojo 6", () => {
     		var product2 = new Product(new Cost(120));
 			var profit = new MultiProductSale([product1, product2], new SellingPrice(300)).profit();
 
-    		chai.assert.equal(80, profit);
+    		chai.assert.isTrue(profit.equals(new Profit(80)));
         });
 
         it("When I sell 1 product of a product pack, the profit is the difference between selling price and its cost", function() {
 			var productPack = new ProductPack(50, new Cost(1000));
 			var profit = new UnitSale(productPack, new SellingPrice(300)).profit();
 
-			chai.assert.equal(280, profit);
+			chai.assert.isTrue(profit.equals(new Profit(280)));
         });
 
         it("When I sell 5 products of a product pack, the profit is the difference between selling price and all products cost", function() {
@@ -134,7 +150,15 @@ describe("dojo 6", () => {
 				, new SellingPrice(300))
 			.profit();
 
-    		chai.assert.equal(200, profit);
+    		chai.assert.isTrue(profit.equals(new Profit(200)));
+        });
+
+        it("When I sell a product and they pay me with a cow, the profit is the cow", () => {
+			var product = new Product(new Cost(100));
+			var cow = new Cow();
+			var profit = new UnitSale(product, new Barter(cow)).profit();
+
+    		chai.assert.isTrue(profit.equals(new Profit(cow)));
         });
     });
 
