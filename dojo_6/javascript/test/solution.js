@@ -3,6 +3,10 @@ const util = require('util');
 
 // --- Amounts 
 
+Number.prototype.equals = function(otherNumber) {
+	return this == otherNumber;	
+};
+
 function Amount(amount) {
 	this.amount = amount
 }
@@ -120,7 +124,7 @@ function Profit(value) {
 }
 
 Profit.prototype.equals = function(otherProfit) {
-	return this._value == otherProfit._value;
+	return this._value.equals(otherProfit._value);
 };
 
 
