@@ -1,35 +1,56 @@
 const chai = require('chai');
+const util = require('util');
 
-function Cost(amount) {
-	this.amount = amount;
+// --- Amounts 
+
+function Amount(amount) {
+	this.amount = amount
 }
 
-Cost.prototype.divide = function(number) {
+Amount.prototype.divide = function(number) {
 	return this.amount / number;
 };
 
-function SellingPrice(amount) {
-	this.amount = amount;
-}
-
-SellingPrice.prototype.difference = function(cost) {
-	return this.amount - cost;
+Amount.prototype.add = function(otherAmount) {
+	return this.amount + otherAmount.amount;
 };
 
+Amount.prototype.difference = function(otherAmount) {
+	return this.amount - otherAmount.amount;
+};
+
+Amount.prototype.equals = function(otherAmount) {
+	return this.amount === otherAmount.amount;
+}
+
+
+function Cost(amount) {
+	Amount.call(this, amount);
+}
+
+util.inherits(Cost, Amount);
+
+
+
+function SellingPrice(amount) {
+	Amount.call(this, amount);
+}
+
+util.inherits(SellingPrice, Amount);
+
+
+
+// --- Products
 
 
 function Product(cost) {
 	this.cost = cost;
 }
 
-Product.prototype.method_name = function(first_argument) {
-	// body...
-};
-
 Product.acumulateCost = function(productList) {
 	var totalCost = 0;
 	for(var i = 0; i < productList.length; i++) {
-		totalCost += productList[i].getCost();
+		totalCost = productList[i].getCost().add(new Cost(totalCost));
 	}
 	return totalCost;
 };
@@ -39,7 +60,7 @@ Product.prototype.profit = function(sellingProfit) {
 };
 
 Product.prototype.getCost = function() {
-	return this.cost.amount;
+	return this.cost;
 };
 
 
@@ -63,6 +84,8 @@ ProductPack.prototype.singleProduct = function() {
 
 
 
+// --- Sales
+
 function UnitSale(productOrPack, sellingPrice) {
 	this.productOrPack = productOrPack;
 	this.sellingPrice = sellingPrice;
@@ -74,7 +97,6 @@ UnitSale.prototype.profit = function() {
 
 
 
-
 function MultiProductSale(products, sellingPrice) {
 	this.products = products;
 	this.sellingPrice = sellingPrice;
@@ -82,7 +104,7 @@ function MultiProductSale(products, sellingPrice) {
 
 MultiProductSale.prototype.profit = function() {
 	return new Profit(this.sellingPrice.difference(
-		this.totalCost()
+		new Cost(this.totalCost())
 	));
 };
 
@@ -91,6 +113,7 @@ MultiProductSale.prototype.totalCost = function() {
 };
 
 
+// --- Profit
 
 function Profit(value) {
 	this._value = value;
@@ -100,6 +123,8 @@ Profit.prototype.equals = function(otherProfit) {
 	return this._value == otherProfit._value;
 };
 
+
+// --- Barter
 
 function Cow() {
 
