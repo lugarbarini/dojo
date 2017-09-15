@@ -7,6 +7,7 @@ const Shipment = require('../shipment.js');
 const NoShipment = require('../no_shipment.js');
 const RemainingAmount = require('../remaining_amount.js');
 const Order = require('../order.js');
+const GiftCard = require('../gift_card.js');
 
 // ---
 
@@ -95,6 +96,16 @@ describe("Dojo 7", () => {
 			order.payWithPayments([new CreditCard(), new AccountMoney(accountMoneyBalance)]);
 
 			chai.assert.equal("Dinero en Cuenta: $100 - Tarjeta de Crédito: 1x $900", order.printPaymentDetail());
+        });
+
+
+        it("Tengo una orden por 1000 y pago 100 con dinero en cuenta, 50 con Gift Card y el resto con tarjeta. Al imprimir el detalle de pagos se muestra $100 por dinero en cuenta, $50 con la gift card y $850 con Tarjeta en 1 cuota", () => {
+			var order = new Order(1000 /* item total */);
+			var accountMoneyBalance = 100;
+			
+			order.payWithPayments([new AccountMoney(accountMoneyBalance), new GiftCard(50), new CreditCard()]);
+
+			chai.assert.equal("Dinero en Cuenta: $100 - Gift Card: $50 - Tarjeta de Crédito: 1x $850", order.printPaymentDetail());
         });
     });
 });

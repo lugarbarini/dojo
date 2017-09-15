@@ -13,7 +13,7 @@ CreditCard.prototype.printPaymentDetail = function(amountToPay) {
 };
 
 CreditCard.prototype.priority = function() {
-	return 1;
+	return 10;
 };
 
 module.exports = CreditCard;
