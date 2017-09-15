@@ -1,114 +1,14 @@
 const chai = require('chai');
 
-function AccountMoney(balance) {
-	this._balance = balance;
-}
-
-AccountMoney.prototype.printPaymentDetail = function(amountToPay) {
-	return "Dinero en Cuenta: $" + amountToPay;
-};
-
-AccountMoney.prototype.contributeWith = function(amountToPay) {
-	return Math.min(amountToPay, this._balance);
-};
+const AccountMoney = require('../account_money.js');
+const Installment = require('../installment.js');
+const CreditCard = require('../credit_card.js');
+const Shipment = require('../shipment.js');
+const NoShipment = require('../no_shipment.js');
+const RemainingAmount = require('../remaining_amount.js');
+const Order = require('../order.js');
 
 // ---
-
-function Installment(installmentCount) {
-	this._installmentCount = installmentCount;
-}
-
-Installment.prototype.printDetailForAmount = function(amountToPay) {
-	return this._installmentCount + "x $" + this._amount(amountToPay);
-};
-
-Installment.prototype._amount = function(amountToPay) {
-	return amountToPay/this._installmentCount;
-};
-
-// ---
-
-function CreditCard(installment) {
-	this._installment = installment || new Installment(1);
-}
-
-CreditCard.prototype.contributeWith = function(amountToPay) {
-	return amountToPay;
-};
-
-CreditCard.prototype.printPaymentDetail = function(amountToPay) {
-	return "Tarjeta de Crédito: " + this._installment.printDetailForAmount(amountToPay);
-};
-
-
-// ---
-
-function Shipment(cost) {
-	this._cost = cost;
-}
-
-Shipment.prototype.cost = function() {
-	return this._cost;
-};
-
-function NoShipment() {
-
-}
-
-NoShipment.prototype.cost = function() {
-	return 0;
-};
-
-// ---
-
-function RemainingAmount(initialAmount) {
-	this._remainingAmount = initialAmount;
-}
-
-RemainingAmount.prototype.addContribution = function(payment) {
-	var contribution = payment.contributeWith(this._remainingAmount);
-	this._remainingAmount = this._remainingAmount - contribution;
-	return contribution;
-};
-
-// ---
-
-function Order(amount) {
-	this._amount = amount;
-	this._shipment = new NoShipment();
-	this._payments = [];
-}
-
-Order.prototype.shipWith = function(shipment) {
-	this._shipment = shipment || new NoShipment();
-};
-
-Order.prototype.payWith = function(payment) {
-	this._payments.push(payment);
-};
-
-Order.prototype.payWithPayments = function(paymentList) {
-	paymentList.forEach( p => this.payWith(p) );
-};
-
-Order.prototype._totalAmount = function() {
-	return this._amount + this._shipment.cost();
-};
-
-Order.prototype.printPaymentDetail = function() {
-	var details = [];
-	var remainingAmount = new RemainingAmount(this._totalAmount());
-
-	for(var i=0; i < this._payments.length; i++) {
-		var payment = this._payments[i]; 
-		var contribution = remainingAmount.addContribution(payment);
-		details.push(payment.printPaymentDetail(contribution));
-	}
-
-	return details.join(" - ");
-};
-
-
 
 // ---
 
@@ -175,7 +75,7 @@ describe("Dojo 7", () => {
 			chai.assert.equal("Dinero en Cuenta: $100 - Tarjeta de Crédito: 1x $900", order.printPaymentDetail());
         });
 
-        it("Tengo una orden por 1000 y pago 100 con dinero en cuenta y el resto con tarjeta. Al imprimir el detalle de pagos se muestra $100 por dinero en cuenta y $900 con Tarjeta en 1 cuota", () => {
+        it.skip("Tengo una orden por 1000 y pago 100 con dinero en cuenta y el resto con tarjeta. Al imprimir el detalle de pagos se muestra $100 por dinero en cuenta y $900 con Tarjeta en 1 cuota", () => {
 			var order = new Order(1000 /* item total */);
 			var accountMoneyBalance = 100;
 			
