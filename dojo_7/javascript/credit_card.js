@@ -12,4 +12,8 @@ CreditCard.prototype.printPaymentDetail = function(amountToPay) {
 	return "Tarjeta de Crédito: " + this._installment.printDetailForAmount(amountToPay);
 };
 
+CreditCard.prototype.priority = function() {
+	return 1;
+};
+
 module.exports = CreditCard;

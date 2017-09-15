@@ -8,11 +8,11 @@ function Order(amount) {
 }
 
 Order.prototype.shipWith = function(shipment) {
-	this._shipment = shipment || new NoShipment();
+	this._shipment = shipment;
 };
 
 Order.prototype.payWith = function(payment) {
-	this._payments.push(payment);
+	this._payments.splice(payment.priority(), 0, payment);
 };
 
 Order.prototype.payWithPayments = function(paymentList) {

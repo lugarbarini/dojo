@@ -75,7 +75,20 @@ describe("Dojo 7", () => {
 			chai.assert.equal("Dinero en Cuenta: $100 - Tarjeta de Crédito: 1x $900", order.printPaymentDetail());
         });
 
-        it.skip("Tengo una orden por 1000 y pago 100 con dinero en cuenta y el resto con tarjeta. Al imprimir el detalle de pagos se muestra $100 por dinero en cuenta y $900 con Tarjeta en 1 cuota", () => {
+        it("Tengo una orden por 1000 y pago 100 con dinero en cuenta y el resto con tarjeta. Luego cambio el envio. Al imprimir el detalle de pagos se muestran los pagos con el monto actualizado", () => {
+			var order = new Order(1000 /* item total */);
+			var accountMoneyBalance = 100;
+			
+			order.payWithPayments([new AccountMoney(accountMoneyBalance), new CreditCard()]);
+
+			chai.assert.equal("Dinero en Cuenta: $100 - Tarjeta de Crédito: 1x $900", order.printPaymentDetail());
+
+			order.shipWith(new Shipment(50));
+
+			chai.assert.equal("Dinero en Cuenta: $100 - Tarjeta de Crédito: 1x $950", order.printPaymentDetail());
+        });
+
+        it("Tengo una orden por 1000 y pago 100 con dinero en cuenta y el resto con tarjeta. Al imprimir el detalle de pagos se muestra $100 por dinero en cuenta y $900 con Tarjeta en 1 cuota", () => {
 			var order = new Order(1000 /* item total */);
 			var accountMoneyBalance = 100;
 			

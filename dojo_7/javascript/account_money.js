@@ -10,5 +10,8 @@ AccountMoney.prototype.contributeWith = function(amountToPay) {
 	return Math.min(amountToPay, this._balance);
 };
 
+AccountMoney.prototype.priority = function() {
+	return 0;
+};
 
 module.exports = AccountMoney;
