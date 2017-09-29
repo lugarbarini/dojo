@@ -35,10 +35,11 @@ Order.prototype.printPaymentDetail = function() {
 	for(var i=0; i < this._payments.length; i++) {
 		var payment = this._payments[i]; 
 		var contribution = remainingAmount.addContribution(payment);
-		details.push(payment.printPaymentDetail(contribution));
+		details.push(contribution.printPaymentDetail());
 	}
 
-	return details.join(" - ");
+	// filter empty payment contributions and join them
+	return details.filter(detail => detail !== '').join(" - ");
 };
 
 module.exports = Order;

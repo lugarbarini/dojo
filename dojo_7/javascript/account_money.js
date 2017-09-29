@@ -1,3 +1,5 @@
+const Contribution = require('./contribution.js');
+
 function AccountMoney(balance) {
 	this._balance = balance;
 }
@@ -7,7 +9,7 @@ AccountMoney.prototype.printPaymentDetail = function(amountToPay) {
 };
 
 AccountMoney.prototype.contributeWith = function(amountToPay) {
-	return Math.min(amountToPay, this._balance);
+	return new Contribution(this, Math.min(amountToPay, this._balance));
 };
 
 AccountMoney.prototype.priority = function() {

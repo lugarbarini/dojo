@@ -4,7 +4,7 @@ function RemainingAmount(initialAmount) {
 
 RemainingAmount.prototype.addContribution = function(payment) {
 	var contribution = payment.contributeWith(this._remainingAmount);
-	this._remainingAmount = this._remainingAmount - contribution;
+	this._remainingAmount = contribution.substractFrom(this._remainingAmount);
 	return contribution;
 };
 

@@ -1,14 +1,15 @@
+const Contribution = require('./contribution.js');
+
 function GiftCard(giftCardAmount) {
 	this._amount = giftCardAmount;
 }
-
 
 GiftCard.prototype.printPaymentDetail = function(amountToPay) {
 	return "Gift Card: $" + amountToPay;
 };
 
 GiftCard.prototype.contributeWith = function(amountToPay) {
-	return Math.min(amountToPay, this._amount);
+	return new Contribution(this, Math.min(amountToPay, this._amount));
 };
 
 GiftCard.prototype.priority = function() {

@@ -1,11 +1,12 @@
 const Installment = require('./installment.js');
+const Contribution = require('./contribution.js');
 
 function CreditCard(installment) {
 	this._installment = installment || new Installment(1);
 }
 
 CreditCard.prototype.contributeWith = function(amountToPay) {
-	return amountToPay;
+	return new Contribution(this, amountToPay);
 };
 
 CreditCard.prototype.printPaymentDetail = function(amountToPay) {

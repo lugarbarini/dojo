@@ -107,6 +107,15 @@ describe("Dojo 7", () => {
 
 			chai.assert.equal("Dinero en Cuenta: $100 - Gift Card: $50 - Tarjeta de Crédito: 1x $850", order.printPaymentDetail());
         });
+
+        it("Tengo una orden por 1000, 2000 con dinero en cuenta y 50 con Gift Card. Al imprimir el detalle de pagos se muestra sólo $1000 por dinero en cuenta", () => {
+			var order = new Order(1000 /* item total */);
+			var accountMoneyBalance = 2000;
+			
+			order.payWithPayments([new AccountMoney(accountMoneyBalance), new GiftCard(50)]);
+
+			chai.assert.equal("Dinero en Cuenta: $1000", order.printPaymentDetail());
+        });
     });
 });
 
