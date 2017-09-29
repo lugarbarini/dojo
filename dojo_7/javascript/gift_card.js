@@ -12,7 +12,7 @@ GiftCard.prototype.contributeWith = function(amountToPay) {
 };
 
 GiftCard.prototype.priority = function() {
-	return 1;
+	return 0;
 };
 
 module.exports = GiftCard;

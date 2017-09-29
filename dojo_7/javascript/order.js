@@ -12,7 +12,8 @@ Order.prototype.shipWith = function(shipment) {
 };
 
 Order.prototype.payWith = function(payment) {
-	this._payments.splice(payment.priority(), 0, payment);
+	this._payments.push(payment);
+	this._sortPayments();
 };
 
 Order.prototype.payWithPayments = function(paymentList) {
@@ -23,10 +24,14 @@ Order.prototype._totalAmount = function() {
 	return this._amount + this._shipment.cost();
 };
 
+Order.prototype._sortPayments = function() {
+	this._payments.sort(function(payment1, payment2){return payment1.priority()-payment2.priority()});
+};
+
 Order.prototype.printPaymentDetail = function() {
 	var details = [];
 	var remainingAmount = new RemainingAmount(this._totalAmount());
-
+	
 	for(var i=0; i < this._payments.length; i++) {
 		var payment = this._payments[i]; 
 		var contribution = remainingAmount.addContribution(payment);
