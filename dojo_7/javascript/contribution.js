@@ -4,6 +4,7 @@ function Contribution(paymentMethod, amount) {
 }
 
 Contribution.prototype.printPaymentDetail = function() {
+	// conviene crear una "no contribution" para que este if no se desparrame por todos lados
 	return this._amount == 0 ? '' : this._paymentMethod.printPaymentDetail(this._amount);
 };
 
