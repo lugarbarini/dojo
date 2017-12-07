@@ -2,12 +2,7 @@ package com.mercadolibre.dojos;
 
 
 import com.mercadolibre.dojos.dto.*;
-import com.mercadolibre.dojos.util.PaymentMethodType;
-import com.mercadolibre.dojos.util.ShippingMethodType;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * Helper class that calculates the next step for the fallback shipping selection.
@@ -26,8 +21,6 @@ public final class InconsistencyCalculator {
     public static int getInconsistencyValue(CheckoutContext checkoutContext) {
         CheckoutOptionsDto checkoutOptions = checkoutContext.getCheckoutOptionsDto();
         NoneInconsitencia none = new NoneInconsitencia( new CheckoutOptions(checkoutOptions));
-        Inconsistency inconsistency = none;
-        
 
         Inconsistency inconsistencies[] = {
                 new OnlyCanBeSent( new CheckoutOptions(checkoutOptions)),
@@ -37,15 +30,12 @@ public final class InconsistencyCalculator {
                 new OnlyPuis( new CheckoutOptions(checkoutOptions))
         };
 
-        for( Inconsistency i : inconsistencies) {
-            if ( !i.happens().equals( none ) ) {
-                inconsistency = i;
-                break;
-            }
-        };
+        return getInconsistencyThatHappens(none, inconsistencies).getNumber();
 
-        return inconsistency.getNumber();
+    }
 
+    private static Inconsistency getInconsistencyThatHappens(NoneInconsitencia none, Inconsistency[] inconsistencies) {
+        return Arrays.stream(inconsistencies).reduce(none, (current, next) -> current.challenge(next.happens()));
     }
 
 

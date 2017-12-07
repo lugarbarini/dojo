@@ -14,6 +14,11 @@ public class NoneInconsitencia extends Inconsistency {
     }
 
     @Override
+    public Inconsistency challenge(Inconsistency other) {
+        return other;
+    }
+
+    @Override
     public int getNumber() {
         return IInconsistency.NONE;
     }
