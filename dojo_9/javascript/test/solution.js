@@ -6,6 +6,8 @@ const Train = require("../train.js");
 const Section = require("../section.js");
 const Place = require("../place.js");
 const Cost = require("../cost.js");
+const QueryDate = require("../query_date.js");
+const Budget = require("../budget.js");
 
 const BsAsDistance = 0;
 const MDQDistance = 450;
@@ -63,5 +65,28 @@ describe("Sistema de viajes", () => {
         chai.assert.equal( new Cost(2475).equals(trip.salePrice()), true );
 
     });    
+
+    it("Son 180 dias antes de la fecha del viaje en micro de Bs As a MDQ y todavia no se vendio ninguna plaza. El precio de venta del viaje se reduce un 10%", () => {
+
+        var bus = new Bus(new Section(new Place("Bs As", BsAsDistance), new Place("MDQ", MDQDistance)));
+        var trip = new Trip([bus]);
+        var daysBeforeTrip = 180;
+        var budget = new Budget(trip, new QueryDate(daysBeforeTrip));
+
+        chai.assert.equal( new Cost(2227.5).equals(budget.salePrice()), true );
+
+    }); 
+
+
+    it.skip("Son 180 dias antes de la fecha del viaje en micro de Bs As a MDQ y ya se vendió el 80% de las plazas. El precio de venta del viaje incrementa un 20%", () => {
+
+        var bus = new Bus(new Section(new Place("Bs As", BsAsDistance), new Place("MDQ", MDQDistance)));
+        var trip = new Trip([bus]);
+        var daysBeforeTrip = 180;
+        var budget = new Budget(trip, new QueryDate(daysBeforeTrip));
+
+        chai.assert.equal( new Cost(2970).equals(budget.salePrice()), true );
+
+    }); 
     
 });
