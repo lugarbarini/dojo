@@ -43,7 +43,7 @@ describe("Sistema de viajes", () => {
 
     });
 
-    it("Un viaje de Trelew a Bs As pasando por yendo a Bahia Blanca en tren y luego en micro sale $5700", () => {
+    it("Un viaje de Trelew a Bs As yendo a Bahia Blanca en tren y luego en micro a BsAs sale $5700", () => {
 
         var trip = new Trip([
             new Train(new Section(new Place("Trelew", TrelewDistance), new Place("Bahia Blanca", BahiaBlancaDistance))),
@@ -53,5 +53,15 @@ describe("Sistema de viajes", () => {
         chai.assert.equal( new Cost(5700).equals(trip.cost()), true );
 
     });
+
+
+    it("En condiciones normales, el precio de venta del viaje es 10% por sobre el costo del mismo", () => {
+
+        var bus = new Bus(new Section(new Place("Bs As", BsAsDistance), new Place("MDQ", MDQDistance)));
+        var trip = new Trip([bus]);
+
+        chai.assert.equal( new Cost(2475).equals(trip.salePrice()), true );
+
+    });    
     
 });

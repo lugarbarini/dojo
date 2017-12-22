@@ -2,6 +2,7 @@ const Cost = require("./cost.js");
 
 function Trip(transports) {
     this._transports = transports;
+    this._profit = 1.1;
 }
 
 Trip.prototype.cost = function() {
@@ -12,6 +13,10 @@ Trip.prototype.cost = function() {
 	}
 
 	return cost;
+};
+
+Trip.prototype.salePrice = function() {
+	return this.cost().percent(this._profit);
 };
 
 module.exports = Trip;
