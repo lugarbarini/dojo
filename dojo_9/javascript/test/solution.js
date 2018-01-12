@@ -94,5 +94,34 @@ describe("Sistema de viajes", () => {
         chai.assert.equal( new Cost(2970).equals(budget.salePrice()), true );
 
     }); 
+
+
+    it("Son 90 dias antes de la fecha del viaje en micro de Bs As a MDQ y ya se vendió el 90% de las plazas (queda 10% o menos libre). El precio de venta del viaje se incrementa un 50%", () => {
+
+        var bus = new Bus(new Section(new Place("Bs As", BsAsDistance), new Place("MDQ", MDQDistance)));
+        var trip = new Trip([bus]);
+        var daysBeforeTrip = 90;
+        var availability = new Availability(10);    // mockeamos que la disponibilidad es 10%
+        var budgetCreator = new BudgetCreator(availability);
+
+        var budget = budgetCreator.createBudget(trip, new QueryDate(daysBeforeTrip));
+
+        chai.assert.equal( new Cost(3712.5).equals(budget.salePrice()), true );
+
+    });
+
+    it("Son 90 dias antes de la fecha del viaje en micro de Bs As a MDQ y se vendió menos del 90% de las plazas (queda mas de 10% libre). El precio de venta del viaje se reduce un 20%", () => {
+
+        var bus = new Bus(new Section(new Place("Bs As", BsAsDistance), new Place("MDQ", MDQDistance)));
+        var trip = new Trip([bus]);
+        var daysBeforeTrip = 90;
+        var availability = new Availability(11);    // mockeamos que la disponibilidad es 11%
+        var budgetCreator = new BudgetCreator(availability);
+
+        var budget = budgetCreator.createBudget(trip, new QueryDate(daysBeforeTrip));
+
+        chai.assert.equal( new Cost(1980).equals(budget.salePrice()), true );
+
+    }); 
     
 });

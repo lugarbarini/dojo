@@ -7,9 +7,17 @@ function BudgetCreator(availability) {
 
 BudgetCreator.prototype.createBudget = function(trip, queryDate) {
 
-	var pricingPolicy = this._availability.returnIfAvailability(20 /* porcentaje de disponibilidad*/, 
-		new TripDiscountPercent(10), 
-		new TripExtraChargePercent(20));
+	var pricingPolicy;
+
+	if (queryDate.daysToTrip() >= 180) {
+		var pricingPolicy = this._availability.returnIfAvailability(20 /* porcentaje de disponibilidad*/, 
+			new TripDiscountPercent(10), 
+			new TripExtraChargePercent(20));
+	} else {
+		var pricingPolicy = this._availability.returnIfAvailability(10 /* porcentaje de disponibilidad*/, 
+			new TripDiscountPercent(20), 
+			new TripExtraChargePercent(50));
+	}
 
 	return new Budget(pricingPolicy.applyTo(trip.salePrice()));
 };
