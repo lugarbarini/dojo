@@ -7,7 +7,7 @@ const Section = require("../section.js");
 const Place = require("../place.js");
 const Cost = require("../cost.js");
 const QueryDate = require("../query_date.js");
-const Budget = require("../budget.js");
+const BudgetCreator = require("../budget_creator.js");
 const Availability = require("../availability.js");
 
 const BsAsDistance = 0;
@@ -72,10 +72,12 @@ describe("Sistema de viajes", () => {
         var bus = new Bus(new Section(new Place("Bs As", BsAsDistance), new Place("MDQ", MDQDistance)));
         var trip = new Trip([bus]);
         var daysBeforeTrip = 180;
-        var budget = new Budget(trip, new QueryDate(daysBeforeTrip));
         var availability = new Availability(100);    // mockeamos que la disponibilidad es 100%
+        var budgetCreator = new BudgetCreator(availability);
 
-        chai.assert.equal( new Cost(2227.5).equals(budget.salePrice(availability)), true );
+        var budget = budgetCreator.createBudget(trip, new QueryDate(daysBeforeTrip));
+
+        chai.assert.equal( new Cost(2227.5).equals(budget.salePrice()), true );
 
     }); 
 
@@ -84,10 +86,12 @@ describe("Sistema de viajes", () => {
         var bus = new Bus(new Section(new Place("Bs As", BsAsDistance), new Place("MDQ", MDQDistance)));
         var trip = new Trip([bus]);
         var daysBeforeTrip = 180;
-        var budget = new Budget(trip, new QueryDate(daysBeforeTrip));
         var availability = new Availability(20);    // mockeamos que la disponibilidad es 20%
+        var budgetCreator = new BudgetCreator(availability);
 
-        chai.assert.equal( new Cost(2970).equals(budget.salePrice(availability)), true );
+        var budget = budgetCreator.createBudget(trip, new QueryDate(daysBeforeTrip));
+
+        chai.assert.equal( new Cost(2970).equals(budget.salePrice()), true );
 
     }); 
     
