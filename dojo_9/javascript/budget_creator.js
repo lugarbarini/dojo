@@ -7,16 +7,10 @@ function BudgetCreator(availability) {
 
 BudgetCreator.prototype.createBudget = function(trip, queryDate) {
 
-	// TODO refactor
-	var pricingPolicy;
-	if (this._availability.availablePlacesPercentForTrip(trip) <= 20) {
-		// mas de 80% vendido, se incrementa 20% el precio del viaje
-		pricingPolicy = new TripExtraChargePercent(20);
-	} else {
-		// menos de 80% vendido, se reduce 10% el precio del viaje
-		pricingPolicy = new TripDiscountPercent(10);
-	}
-	
+	var pricingPolicy = this._availability.returnIfAvailability(20 /* porcentaje de disponibilidad*/, 
+		new TripDiscountPercent(10), 
+		new TripExtraChargePercent(20));
+
 	return new Budget(pricingPolicy.applyTo(trip.salePrice()));
 };
 
