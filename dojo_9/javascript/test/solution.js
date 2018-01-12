@@ -8,6 +8,7 @@ const Place = require("../place.js");
 const Cost = require("../cost.js");
 const QueryDate = require("../query_date.js");
 const Budget = require("../budget.js");
+const Availability = require("../availability.js");
 
 const BsAsDistance = 0;
 const MDQDistance = 450;
@@ -72,20 +73,21 @@ describe("Sistema de viajes", () => {
         var trip = new Trip([bus]);
         var daysBeforeTrip = 180;
         var budget = new Budget(trip, new QueryDate(daysBeforeTrip));
+        var availability = new Availability(100);    // mockeamos que la disponibilidad es 100%
 
-        chai.assert.equal( new Cost(2227.5).equals(budget.salePrice()), true );
+        chai.assert.equal( new Cost(2227.5).equals(budget.salePrice(availability)), true );
 
     }); 
 
-
-    it.skip("Son 180 dias antes de la fecha del viaje en micro de Bs As a MDQ y ya se vendió el 80% de las plazas. El precio de venta del viaje incrementa un 20%", () => {
+    it("Son 180 dias antes de la fecha del viaje en micro de Bs As a MDQ y ya se vendió el 80% de las plazas (queda solo el 20% libre). El precio de venta del viaje incrementa un 20%", () => {
 
         var bus = new Bus(new Section(new Place("Bs As", BsAsDistance), new Place("MDQ", MDQDistance)));
         var trip = new Trip([bus]);
         var daysBeforeTrip = 180;
         var budget = new Budget(trip, new QueryDate(daysBeforeTrip));
+        var availability = new Availability(20);    // mockeamos que la disponibilidad es 20%
 
-        chai.assert.equal( new Cost(2970).equals(budget.salePrice()), true );
+        chai.assert.equal( new Cost(2970).equals(budget.salePrice(availability)), true );
 
     }); 
     
