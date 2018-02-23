@@ -5,10 +5,13 @@ const Bus = require("../bus.js");
 const Train = require("../train.js");
 const Section = require("../section.js");
 const Place = require("../place.js");
+const BuenosAires = require("../buenos_aires.js");
 const Cost = require("../cost.js");
 const QueryDate = require("../query_date.js");
 const BudgetCreator = require("../budget_creator.js");
 const Availability = require("../availability.js");
+
+const TripDiscount = require("../trip_discount.js");
 
 const BsAsDistance = 0;
 const MDQDistance = 450;
@@ -112,7 +115,7 @@ describe("Sistema de viajes", () => {
 
     it("Son 90 dias antes de la fecha del viaje en micro de Bs As a MDQ y se vendió menos del 90% de las plazas (queda mas de 10% libre). El precio de venta del viaje se reduce un 20%", () => {
 
-        var bus = new Bus(new Section(new Place("Bs As", BsAsDistance), new Place("MDQ", MDQDistance)));
+        var bus = new Bus(new Section(new BuenosAires(), new Place("MDQ", MDQDistance)));
         var trip = new Trip([bus]);
         var daysBeforeTrip = 90;
         var availability = new Availability(11);    // mockeamos que la disponibilidad es 11%
@@ -123,5 +126,4 @@ describe("Sistema de viajes", () => {
         chai.assert.equal( new Cost(1980).equals(budget.salePrice()), true );
 
     }); 
-    
 });
