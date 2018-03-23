@@ -19,41 +19,50 @@ import kotlin.test.assertEquals
 class DojoTest {
 
     @Test
+    fun congrats_order_paid_off_for_unknownDevice_returns_mlu_offline_payment() {
+        val originalJson = loadFile("congrats_order_paid_off_from_api.json")
+        val expectedResponse = loadFile("congrats_order_paid_off_from_api.json")
+        val originalResponse = Congrats(originalJson).toJson()
+
+        assertEquals(expectedResponse, originalResponse)
+    }
+
+    @Test
     fun congrats_order_paid_off_for_ios_8_10_0_returns_mlu_offline_payment() {
-        val originalJson = loadFile("congrats_order_paid_off_for_ios_8_10_0.json")
+        val originalJson = loadFile("congrats_order_paid_off_from_api.json")
         val expectedResponse = loadFile("congrats_order_paid_off_for_ios_8_10_0.json")
         val iOSDevice = IOS(Version_8_10_0())
-        val iOSResponse = Congrats(originalJson).adaptFor(iOSDevice).toJson()
+        val iOSResponse = Congrats(originalJson).toJson(iOSDevice)
 
         assertEquals(expectedResponse, iOSResponse)
     }
 
     @Test
     fun congrats_order_paid_off_for_android_7_12_0_returns_offline_payment() {
-        val originalJson = loadFile("congrats_order_paid_off_for_ios_8_10_0.json")
+        val originalJson = loadFile("congrats_order_paid_off_from_api.json")
         val expectedResponse = loadFile("congrats_order_paid_off_for_android_7_12_0.json")
         val androidDevice = Android(Version_7_12_0())
-        val androidResponse = Congrats(originalJson).adaptFor(androidDevice).toJson()
+        val androidResponse = Congrats(originalJson).toJson(androidDevice)
 
         assertEquals(expectedResponse, androidResponse)
     }
 
     @Test
     fun congrats_order_paid_off_for_android_103_0_0_returns_offline_payment() {
-        val originalJson = loadFile("congrats_order_paid_off_for_ios_8_10_0.json")
+        val originalJson = loadFile("congrats_order_paid_off_from_api.json")
         val expectedResponse = loadFile("congrats_order_paid_off_for_android_103_0_0.json")
         val androidDevice = Android(Version_103_0_0())
-        val androidResponse = Congrats(originalJson).adaptFor(androidDevice).toJson()
+        val androidResponse = Congrats(originalJson).toJson(androidDevice)
 
         assertEquals(expectedResponse, androidResponse)
     }
 
     @Test
     fun congrats_order_paid_off_for_ios_8_11_0_returns_offline_payment() {
-        val originalJson = loadFile("congrats_order_paid_off_for_ios_8_10_0.json")
+        val originalJson = loadFile("congrats_order_paid_off_from_api.json")
         val expectedResponse = loadFile("congrats_order_paid_off_for_ios_8_11_0.json")
         val iosDevice = IOS(Version_8_11_0())
-        val iosResponse = Congrats(originalJson).adaptFor(iosDevice).toJson()
+        val iosResponse = Congrats(originalJson).toJson(iosDevice)
 
         assertEquals(expectedResponse, iosResponse)
     }
