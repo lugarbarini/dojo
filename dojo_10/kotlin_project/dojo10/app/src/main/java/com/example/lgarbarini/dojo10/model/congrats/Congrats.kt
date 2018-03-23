@@ -8,11 +8,27 @@ import com.example.lgarbarini.dojo10.model.devices.Device
 class Congrats(var json: String) {
 
     fun adaptFor(device: Device) : Congrats {
-        json = device.adaptCongrats(json)
+        device.adaptCongrats(this)
         return this
     }
 
     fun toJson() : String {
         return json
+    }
+
+    fun removeSection(sectionName: String) {
+        json = json.replace(", {\n" +
+                "    \"type\": \"exit\",\n" +
+                "    \"model\": {\n" +
+                "      \"actions\": [{\n" +
+                "        \"id\": \"go_to_home\",\n" +
+                "        \"text\": \"Seguir comprando\"\n" +
+                "      }]\n" +
+                "    }\n" +
+                "  }", "")
+    }
+
+    fun replaceSectionType(oldSectionName: String, newSectionName: String) {
+        json = json.replace(oldSectionName, newSectionName)
     }
 }
