@@ -4,9 +4,8 @@ class SolicitudConCapacidad(private val aulasDisponibles: List<Aula>, private va
 capacidadSolicitada: Capacidad) {
 
     fun asignar(): Asignacion {
-        val aulaElegida = aulasDisponibles.find { aula -> aula.tieneCapacidad(capacidadSolicitada) }
-
-        return Asignacion(aulaElegida ?: NoAula())
+        val aulaElegida = aulasDisponibles.reduce{ noAula, aula -> aula.conCapacidad(capacidadSolicitada, NoAula())}
+        return Asignacion(aulaElegida)
     }
 
 
