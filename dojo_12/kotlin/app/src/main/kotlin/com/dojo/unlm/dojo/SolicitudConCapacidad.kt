@@ -4,7 +4,7 @@ class SolicitudConCapacidad(private val aulasDisponibles: List<Aula>, private va
 capacidadSolicitada: Capacidad) {
 
     fun asignar(): Asignacion {
-        val aulaElegida = aulasDisponibles.reduce{ noAula, aula -> aula.conCapacidad(capacidadSolicitada, NoAula())}
+        val aulaElegida = aulasDisponibles.reduce{ noAula, aula -> aula.conCapacidad(capacidadSolicitada, noAula)}
         return Asignacion(aulaElegida)
     }
 

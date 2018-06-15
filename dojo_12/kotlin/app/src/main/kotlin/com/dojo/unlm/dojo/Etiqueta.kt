@@ -9,4 +9,8 @@ class Etiqueta(private val etiqueta: String = "") {
     override fun hashCode(): Int {
         return etiqueta.hashCode()
     }
+
+    override fun toString(): String {
+        return etiqueta
+    }
 }
