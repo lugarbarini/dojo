@@ -6,7 +6,9 @@ package com.dojo.unlm
 open class Persona(internal val nombre: String) {
 
     open fun fusionar(otra : Persona) : Persona {
-        return otra.fusionWith(this)
+        return if (otra.javaClass == this.javaClass) Persona(otra.nombre + " " + nombre) else
+            Zombie(otra.nombre + " " + nombre)
+        // return otra.fusionWith(this)
     }
 
     open protected fun fusionWith(otra: Persona) : Persona {

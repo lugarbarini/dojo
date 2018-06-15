@@ -73,6 +73,16 @@ class StreamsTest : Spek({
 
                 assertEquals("Lucia Carolina Garbarini (zombie)", fusionada.toString())
             }
+
+            it("Reduce: with one zombie turns everyone into zombies text 2") {
+                val personas = listOf(Persona("Lucia"), Persona("Carolina"), Zombie
+                ("Garbarini"))
+                val fusionada = personas.reduce { acc: Persona, persona: Persona ->
+                    persona.fusionar(acc)
+                }
+
+                assertEquals("Lucia Carolina Garbarini (zombie)", fusionada.toString())
+            }
         }
     }
 })

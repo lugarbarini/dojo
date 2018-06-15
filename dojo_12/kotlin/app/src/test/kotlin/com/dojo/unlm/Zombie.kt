@@ -6,7 +6,8 @@ package com.dojo.unlm
 class Zombie(nombre: String) : Persona(nombre) {
 
     override fun fusionar(otra: Persona): Persona {
-        return otra.fusionWith(this)
+       return Zombie(otra.nombre + " " + nombre)
+        // return otra.fusionWith(this)
     }
 
     override fun fusionWith(otra: Persona): Persona {
