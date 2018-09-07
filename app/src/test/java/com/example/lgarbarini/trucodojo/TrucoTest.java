@@ -7,6 +7,7 @@ import com.example.lgarbarini.trucodojo.cartas.AnchoDeEspadas;
 import com.example.lgarbarini.trucodojo.cartas.DiezDeBasto;
 import com.example.lgarbarini.trucodojo.cartas.DiezDeCopas;
 import com.example.lgarbarini.trucodojo.cartas.DosDeCopas;
+import com.example.lgarbarini.trucodojo.cartas.SieteDeBasto;
 import com.example.lgarbarini.trucodojo.cartas.TresDeCopas;
 import com.example.lgarbarini.trucodojo.jugador.Cris;
 import com.example.lgarbarini.trucodojo.jugador.Nelson;
@@ -19,6 +20,10 @@ import static org.junit.Assert.assertEquals;
 
 public class TrucoTest {
 
+    /**
+     * Nelson tiene: 21
+     * Cris tiene: 25
+     */
     @Test
     public void envido_querido_gana_el_que_dice_quiero() {
         Nelson nelson = new Nelson(new AnchoDeBasto(), new DiezDeBasto(), new DiezDeCopas());
@@ -34,5 +39,26 @@ public class TrucoTest {
 
         assertEquals(new Puntos(cris, new Envido()), mano.puntos(cris));
         assertEquals(new Puntos(nelson, new SinApuesta()), mano.puntos(nelson));
+    }
+
+    /**
+     * Nelson tiene: 28
+     * Cris tiene: 25
+     */
+    @Test
+    public void envido_querido_gana_el_que_dice_quiero_con_otras_cartas() {
+        Nelson nelson = new Nelson(new AnchoDeBasto(), new SieteDeBasto(), new DiezDeCopas());
+        Cris cris = new Cris(new DosDeCopas(), new TresDeCopas(), new AnchoDeEspadas());
+
+        Mano mano = new Mano();
+
+        mano = nelson.envido(mano);
+        mano = cris.quiero(mano);
+
+        mano = nelson.diceSuEnvido(mano);
+        mano = cris.diceSuEnvido(mano);
+
+        assertEquals(new Puntos(cris, new SinApuesta()), mano.puntos(cris));
+        assertEquals(new Puntos(nelson, new Envido()), mano.puntos(nelson));
     }
 }
