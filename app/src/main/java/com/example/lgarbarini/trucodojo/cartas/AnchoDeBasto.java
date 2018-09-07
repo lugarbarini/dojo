@@ -3,8 +3,8 @@ package com.example.lgarbarini.trucodojo.cartas;
 /**
  * Created by lgarbarini on 31/08/2018.
  */
-public class AnchoDeBasto extends Carta {
+public class AnchoDeBasto extends Basto {
     public AnchoDeBasto() {
-        super("basto", 1);
+        super(1);
     }
 }
